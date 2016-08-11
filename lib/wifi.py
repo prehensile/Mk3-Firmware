@@ -45,38 +45,44 @@ def ssid():
     if _network is None:
         return "Not connected"
     return _network["ssid"]
+            
 
 def connect(wait = True, timeout = 10):
     global _network
+    
     if nic().is_connected():
         return
+    
     networks = connection_details()
+    visible_ssids = [ ap['ssid'] for ap in nic().list_aps() ]
 
     exc = None
     for details in networks:
-        _network = details
-        
-        try:
-            if "pw" in details and details["pw"]:
-                if wait:
-                    nic().connect(details["ssid"], details["pw"], timeout=timeout)
-                    wait_for_connection()
-                else:
-                    nic().connect(details["ssid"], details["pw"], timeout=None)
-            else:
-                if wait:
-                    nic().connect(details["ssid"], timeout=timeout)
-                    wait_for_connection()
-                else:
-                    nic().connect(details["ssid"], timeout=None)
-        except Exception as e:
-            exc = e
 
-        if nic().is_connected():
-            # successful connection, we don't need to try any more
+        if details["ssid"] in visible_ssids:
+
+            _network = details
+            
+            try:
+                if "pw" in details and details["pw"]:
+                    if wait:
+                        nic().connect(details["ssid"], details["pw"], timeout=timeout)
+                        wait_for_connection()
+                    else:
+                        nic().connect(details["ssid"], details["pw"], timeout=None)
+                else:
+                    if wait:
+                        nic().connect(details["ssid"], timeout=timeout)
+                        wait_for_connection()
+                    else:
+                        nic().connect(details["ssid"], timeout=None)
+            except OSError as e:
+                exc = e
+
+            # found an AP to connect to, don't bother trying any more
             break
 
-    if (not nic().is_connected()) and (exc is not None):
+    if exc is not None:
         raise exc
 
 def wait_for_connection():
