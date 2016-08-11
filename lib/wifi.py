@@ -45,8 +45,13 @@ def ssid():
     if _network is None:
         return "Not connected"
     return _network["ssid"]
-            
 
+def rssi():
+    v = 0
+    if is_connected():
+        v = nic().get_rssi()
+    return v
+        
 def connect(wait = True, timeout = 10):
     global _network
     

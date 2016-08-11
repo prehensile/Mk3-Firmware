@@ -273,7 +273,7 @@ def home_main():
 			ledg.on()
 
 			# display the wifi logo
-			rssi = wifi.nic().get_rssi()
+			rssi = wifi.rssi()
 			if rssi == 0:
 				rssi = last_rssi
 			else:
