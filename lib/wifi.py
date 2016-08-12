@@ -60,7 +60,13 @@ def rssi():
     if is_connected():
         v = nic().get_rssi()
     return v
-        
+
+def update():
+    nic().update()
+
+def disconnect():
+    nic().disconnect()
+
 def connect(wait = True, timeout = 10):
     
     print( "wifi.connect(wait=%r)" % (wait) )

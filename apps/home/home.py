@@ -223,12 +223,12 @@ def home_main():
 
 		#if wifi still needs poking
 		if (wifi_timeout > 0):
-			if wifi.nic().is_connected():
+			if wifi.is_connected():
 				wifi_timeout = -1
 				#wifi is connected, but if becomes disconnected, reconnect after 5 sec
 				wifi_reconnect_timeout = 5
 			else:
-				wifi.nic().update()
+				wifi.update()
 
 
 		if tick:
