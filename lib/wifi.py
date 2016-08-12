@@ -18,7 +18,7 @@ def nic():
 
 def create_default_config():
     with open("wifi.json", "wt") as file:
-        file.write(json.dumps({"ssid": "emfcamp-insecure"}))
+        file.write(json.dumps([{"ssid": "emfcamp-insecure"}]))
         file.flush()
     os.sync()
 
